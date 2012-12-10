@@ -44,7 +44,7 @@ class Timer(object):
         current['average_elapsed'] = (current['total_elapsed'] /
                                       current['count'])
         self.pop()
-        post_timing.emit(current, stack())
+        post_timing.emit(elapsed, current, stack())
 
 
 def time(f, name=None):

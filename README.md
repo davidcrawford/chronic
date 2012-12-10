@@ -30,16 +30,18 @@ with chronic.Timer('block1'):
 pprint(chronic.timings())
 
 
-def print_done(timings, stack):
+def print_done(elapsed, timings, stack):
     print stack
     pprint(timings)
 
+time_one()
 chronic.post_timing.connect(print_done)
 time_one()
 # []
+# 9.5367431640625e-07
 # {'average_elapsed': 9.5367431640625e-07,
-#  'count': 1,
-#  'total_elapsed': 9.5367431640625e-07}
+#  'count': 2,
+#  'total_elapsed': 1.9073486328125e-06} 
 chronic.post_timing.disconnect(print_done)
 
 
