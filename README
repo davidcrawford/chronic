@@ -49,3 +49,6 @@ time_two()
 #             'count': 1,
 #             'total_elapsed': 5.9604644775390625e-06}}
 ```
+
+
+This software is licensed under the MIT license. See the details in the file called LICENSE.

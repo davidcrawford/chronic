@@ -8,4 +8,5 @@ setup(name='chronic',
       url='http://github.com/davidcrawford/chronic',
       author='David Crawford',
       author_email='david.crawford@gmail.com'
+      license='MIT'
       )
