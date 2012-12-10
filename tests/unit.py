@@ -53,3 +53,4 @@ if __name__ == '__main__':
     tests = [f for f in dir(module) if 'test_' in f]
     for test in tests:
         getattr(module, test)()
+    print '{} tests completed successfully!'.format(len(tests))
