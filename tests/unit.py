@@ -48,6 +48,8 @@ def test_signals():
     assert d['called'] is 1
 
 
+# My own silly little unit test framework.  Will migrate to a
+# real one when I have time to read about them
 if __name__ == '__main__':
     module = sys.modules[__name__]
     tests = [f for f in dir(module) if 'test_' in f]
