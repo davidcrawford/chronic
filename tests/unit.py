@@ -1,58 +1,110 @@
 import os
 import sys
-sys.path.append(os.path.dirname(__file__) + '/..')
+import threading
+import unittest
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from chronic import time, Timer, timings, stack, post_timing
-import time as systime
-
-
-def test_stack():
-    with Timer('a'):
-        with Timer('b'):
-            assert stack() == ['a', 'b']
+from chronic import clear, time, Timer, timings, stack, post_timing
 
 
-def test_timings():
-    with Timer('a'):
-        systime.sleep(0.1)
+class MockClock(object):
+    def __init__(self):
+        self.time = 1000
 
-    assert 'a' in timings(), "Timings dict did not contain timing name"
-    a = timings()['a']
-    assert 'total_elapsed' in a, "Timing didn't include a total_elapsed"
-    assert abs(a['total_elapsed'] - 0.1) < 0.01
+    def add_seconds(self, seconds):
+        self.time += seconds
 
-
-def test_time_decorator():
-    @time
-    def timed_func():
-        systime.sleep(0.1)
-
-    timed_func()
-
-    assert 'timed_func' in timings()
-    a = timings()['timed_func']
-    assert 'total_elapsed' in a, "Timing didn't include a total_elapsed"
-    assert abs(a['total_elapsed'] - 0.1) < 0.01
+    def get_time(self):
+        return self.time
 
 
-def test_signals():
-    d = {}
+class BasicTest(unittest.TestCase):
+    def setUp(self):
+        clear()
 
-    def callback(*args, **kws):
-        d['called'] = 1
+    def test_stack(self):
+        with Timer('a'):
+            with Timer('b'):
+                assert stack == ('a', 'b')
 
-    post_timing.connect(callback)
-    with Timer('a'):
-        pass
+    def test_timings(self):
+        clock = MockClock()
+        with Timer('a', clock=clock.get_time):
+            clock.add_seconds(10)
 
-    assert d['called'] is 1
+        self.assertIn('a', timings,
+                      "Timings dict did not contain timing name")
+        a = timings['a']
+        self.assertIn('total_elapsed', a,
+                      "Timing didn't include a total_elapsed")
+        self.assertEquals(a['total_elapsed'], 10)
+
+    def test_time_decorator(self):
+        clock = MockClock()
+
+        @time(clock=clock.get_time)
+        def timed_func():
+            clock.add_seconds(10)
+
+        timed_func()
+
+        self.assertIn('timed_func', timings)
+        a = timings['timed_func']
+        self.assertIn('total_elapsed', a,
+                      "Timing didn't include a total_elapsed")
+        self.assertEquals(a['total_elapsed'], 10)
+
+    def test_time_decorator_no_args(self):
+
+        @time
+        def timed_func():
+            pass
+
+        timed_func()
+        self.assertIn('timed_func', timings)
+        a = timings['timed_func']
+        self.assertIn('total_elapsed', a,
+                      "Timing didn't include a total_elapsed")
+
+    def test_timings_are_emptied_between_tests(self):
+        '''
+        If not, a lot of the asserts in these tests may incorrectly pass.
+        '''
+        self.assertEquals({}, timings)
+
+    def test_signals(self):
+        d = {}
+
+        def callback(*args, **kws):
+            d['called'] = 1
+
+        post_timing.connect(callback)
+        with Timer('a'):
+            pass
+
+        assert d['called'] is 1
 
 
-# My own silly little unit test framework.  Will migrate to a
-# real one when I have time to read about them
-if __name__ == '__main__':
-    module = sys.modules[__name__]
-    tests = [f for f in dir(module) if 'test_' in f]
-    for test in tests:
-        getattr(module, test)()
-    print '{} tests completed successfully!'.format(len(tests))
+class ThreadingTest(unittest.TestCase):
+    def test_timings_do_not_bleed(self):
+        all_timings = []
+
+        def time_stuff():
+            clock = MockClock()
+            for i in range(5):
+                with Timer('test', clock=clock.get_time):
+                    clock.add_seconds(1)
+            all_timings.append(timings.copy())
+
+        threads = []
+        for i in range(4):
+            t = threading.Thread(target=time_stuff)
+            t.start()
+            threads.append(t)
+
+        for t in threads:
+            t.join()
+
+        for ts in all_timings:
+            self.assertIn('test', ts)
+            self.assertEquals(ts['test']['count'], 5)
