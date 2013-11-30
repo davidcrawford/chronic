@@ -18,6 +18,7 @@ with chronic.Timer('crunch_numbers'):
   # Crunch numbers here
 ```
 
+### chronic.timings
 At any point, you can get the information about completed timing info from `chronic.timings`.  This is a proxy to state held in a thread local about all timed blocks captured so far.
 
 ```python
@@ -50,7 +51,20 @@ Each timing is itself a dict with the following keys:
 * `timings`: a dict of all subtimings that were completed while inside this
   block.
 
+So if you're using Django and want to log all timings to MongoDB, all you need to do is add middleware that looks something like this:
+```python
+import chronic
+from pymongo import MongoClient
 
+client = MongoClient()
+
+class ProfilingMiddleware(object):
+    def process_response(self, request, response):
+        mongo_client.app.timings.insert(chronic.timings)
+        return response
+```
+
+### chronic.stack
 `chronic.stack` is a tuple of the names of all timed blocks in the call stack above the current context.
 
 ```python
@@ -63,6 +77,7 @@ Each timing is itself a dict with the following keys:
 ('time_two', 'block2')
 ```
 
+### chronic.post_timing
 Finally, you can install signal handlers to be called on the completion of all timings.
 Here's how you might send all timing data to [statsd](https://github.com/etsy/statsd/):
 
@@ -115,7 +130,7 @@ time_one()
 # 9.5367431640625e-07
 # {'average_elapsed': 9.5367431640625e-07,
 #  'count': 2,
-#  'total_elapsed': 1.9073486328125e-06} 
+#  'total_elapsed': 1.9073486328125e-06}
 chronic.post_timing.disconnect(print_done)
 
 
