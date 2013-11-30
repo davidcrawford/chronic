@@ -41,19 +41,19 @@ At any point, you can get the information about completed timing info from `chro
 
 Each timing is itself a dict with the following keys:
 
-* total_elapsed: the elapsed execution time of the code (including all
+* `total\_elapsed`: the elapsed execution time of the code (including all
   subtimings) for all runs of this block.  The unit is seconds by default.
   If you pass in your own clock function, the unit is whatever the unit of
   the clock.
-* count: the number of times the timed block was run.
-* average_elapsed: the average elapsed time for each run of this block.
-* timings: a dict of all subtimings that were completed while inside this
+* `count`: the number of times the timed block was run.
+* `average\_elapsed`: the average elapsed time for each run of this block.
+* `timings`: a dict of all subtimings that were completed while inside this
   block.
 
 
 `chronic.stack` is a tuple of the names of all timed blocks in the call stack above the current context.
 
-```
+```python
 >>> import chronic
 >>> @chronic.time
 >>> def time_two():
