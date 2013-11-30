@@ -1,5 +1,5 @@
 Chronic - Python Mini-Profiler
-=========================
+==============================
 
 Chronic is halfway between a simple timer and a profiler.  It does not track every call like a profiler does.  You must specify what levels you want to time.  But it keeps the hierarchy of your timings intact.
 
@@ -16,9 +16,9 @@ def time_one():
 @chronic.time
 def time_two():
     with chronic.Timer('block2'):
-        print chronic.stack()
-        # ['time_two', 'block2']
-    pprint(chronic.timings())
+        print chronic.stack
+        # ('time_two', 'block2')
+    pprint(chronic.timings)
     # prints local view of timings
     # {'block2': {'average_elapsed': 1.0967254638671875e-05,
     #             'count': 1,
@@ -27,7 +27,7 @@ def time_two():
 with chronic.Timer('block1'):
     time_one()
 
-pprint(chronic.timings())
+pprint(chronic.timings)
 
 
 def print_done(elapsed, timings, stack):
