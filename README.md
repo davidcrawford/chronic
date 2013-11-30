@@ -64,7 +64,7 @@ Each timing is itself a dict with the following keys:
 ```
 
 Finally, you can install signal handlers to be called on the completion of all timings.
-Here's how you might send all timing data to (statsd)[https://github.com/etsy/statsd/]:
+Here's how you might send all timing data to [statsd](https://github.com/etsy/statsd/):
 
 ```python
 >>> import chronic
