@@ -39,6 +39,9 @@ class BasicTest(unittest.TestCase):
                       "Timing didn't include a total_elapsed")
         self.assertEquals(a['total_elapsed'], 10)
 
+        self.assertIn('a', timings(),
+                      "Timings dict could not be accessed as a function.")
+
     def test_time_decorator(self):
         clock = MockClock()
 

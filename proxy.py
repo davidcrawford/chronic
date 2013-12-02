@@ -25,6 +25,9 @@ class Proxy(object):
         """
         return self.__getter()
 
+    def __call__(self):
+        return self
+
     @property
     def __dict__(self):
         try:
@@ -85,7 +88,7 @@ class Proxy(object):
     __ge__ = lambda x, o: x._get_current_object() >= o
     __cmp__ = lambda x, o: cmp(x._get_current_object(), o)
     __hash__ = lambda x: hash(x._get_current_object())
-    __call__ = lambda x, *a, **kw: x._get_current_object()(*a, **kw)
+#    __call__ = lambda x, *a, **kw: x._get_current_object()(*a, **kw)
     __len__ = lambda x: len(x._get_current_object())
     __getitem__ = lambda x, i: x._get_current_object()[i]
     __iter__ = lambda x: iter(x._get_current_object())
