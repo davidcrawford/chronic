@@ -1,7 +1,7 @@
-Chronic - Python Mini-Profiler
-==============================
+Chronic - Python Instrumentation
+================================
 
-Chronic is halfway between a simple timer and a profiler.  It does not track every call like a profiler does.  You must specify what levels you want to time.  But it keeps the hierarchy of your timings intact.
+Chronic is halfway between a simple timer and a profiler.  Add decorators or wrap code in with statements to get the execution time.  Chronic keeps track of the call hierarchy to tell you what timed blocks executed within other timed blocks.  Attach an event listener to log your timings however you want.
 
 ## Installation
 
