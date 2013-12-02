@@ -3,6 +3,12 @@ Chronic - Python Mini-Profiler
 
 Chronic is halfway between a simple timer and a profiler.  It does not track every call like a profiler does.  You must specify what levels you want to time.  But it keeps the hierarchy of your timings intact.
 
+## Installation
+
+```
+pip install chronic
+```
+
 ## Usage
 
 To time a block of code, you can use either the `@time` decorator or the `Timer` context manager.
