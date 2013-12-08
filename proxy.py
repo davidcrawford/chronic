@@ -12,8 +12,6 @@ class Proxy(object):
     supported for forwarding are right handed operands and any kind of
     assignment.
     """
-    __slots__ = ('__getter', '__dict__', '__doc__')
-
     def __init__(self, getter, doc=None):
         object.__setattr__(self, '_Proxy__getter', getter)
         object.__setattr__(self, '__doc__', doc)
