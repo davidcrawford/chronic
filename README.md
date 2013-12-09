@@ -62,7 +62,7 @@ So if you're using Django and want to log all timings to MongoDB, all you need t
 import chronic
 from pymongo import MongoClient
 
-client = MongoClient()
+mongo_client = MongoClient()
 
 class ProfilingMiddleware(object):
     def process_response(self, request, response):
