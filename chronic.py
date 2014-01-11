@@ -84,7 +84,7 @@ class Timer(object):
     def __exit__(self, type, val, tb):
         elapsed = self._clock() - self.start
         current = _local.stopwatch['current']
-        current['total_elapsed'] = elapsed + current.get('total', 0)
+        current['total_elapsed'] = elapsed + current.get('total_elapsed', 0)
         current['count'] = 1 + current.get('count', 0)
         current['average_elapsed'] = (current['total_elapsed'] /
                                       current['count'])
