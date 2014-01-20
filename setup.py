@@ -2,7 +2,7 @@ from distutils.core import setup
 
 
 setup(name='chronic',
-      version='0.3.3',
+      version='0.3.4',
       py_modules=['chronic', 'proxy'],
       packages=['signals'],
       description='Half profiler, half timer, 100% fun.',
