@@ -32,12 +32,15 @@ class BasicTest(unittest.TestCase):
         with Timer('a', clock=clock.get_time):
             clock.add_seconds(10)
 
+        with Timer('a', clock=clock.get_time):
+            clock.add_seconds(5)
+
         self.assertIn('a', timings,
                       "Timings dict did not contain timing name")
         a = timings['a']
         self.assertIn('total_elapsed', a,
                       "Timing didn't include a total_elapsed")
-        self.assertEquals(a['total_elapsed'], 10)
+        self.assertEquals(a['total_elapsed'], 15)
 
         self.assertIn('a', timings(),
                       "Timings dict could not be accessed as a function.")
